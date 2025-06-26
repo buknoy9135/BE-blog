@@ -1,0 +1,21 @@
+<%= form_with model: [@article, @comment] do |form| %>
+  <div>
+    <%= form.label :commenter %><br>
+    <%= form.text_field :commenter %>
+    <% comment.errors.full_messages_for(:commenter).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :body_of_the_comment, "Your Comment" %><br>
+    <%= form.text_area :body_of_the_comment %><br>
+    <% comment.errors.full_messages_for(:body_of_the_comment).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
