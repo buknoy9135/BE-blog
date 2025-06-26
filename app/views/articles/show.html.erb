@@ -12,23 +12,35 @@
 
 <h2>Comments</h2>
 
-<% @article.comments.each do |comment| %>
-  <% unless comment.new_record? %>
-    <p><strong>Commenter:</strong> <%= comment.commenter %></p>
-    <p><strong>Comment:</strong> <%= comment.body_of_the_comment %></p>
-    <div style="display: flex; gap: 10px">
-    <span><p><%= link_to "Edit", edit_article_comment_path(@article, comment)%></p></span>
-    <span><p><%= link_to "Delete", article_comment_path(@article, comment), data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "Are you sure?"
-                  }%></p></span>
-    </div>
-  <% end %>
+<% saved_comments = @article.comments.select(&:persisted?) %>
+
+<% saved_comments.each_with_index do |comment, index| %>
+  <% break if index > 0 %>
+
+  <p><strong>Commenter:</strong> <%= comment.commenter %></p>
+  <p><strong>Comment:</strong> <%= comment.body_of_the_comment %></p>
+
+  <div style="display: flex; gap: 10px">
+    <span>
+      <%= link_to "Edit", edit_article_comment_path(@article, comment) %>
+    </span>
+    <span>
+      <%= link_to "Delete", article_comment_path(@article, comment), data: {
+                      turbo_method: :delete,
+                      turbo_confirm: "Are you sure?"
+                    } %>
+    </span>
+  </div>
 <% end %>
+
+<% if saved_comments.size > 1 %>
+  <p><%= link_to "Show All Comments (#{saved_comments.size})", article_comments_path(@article) %></p>
+<% elsif saved_comments.empty? %>
+  <p>No comments yet.</p>
+<% end %>
+
 
 <h2>Add a comment:</h2>
 <%= render 'comments/form', comment:@comment %>
 
-
-
-<%= link_to "Return to Home", articles_path %>
+<%= link_to "<< Return to Home", articles_path %>

@@ -1,6 +1,14 @@
 class CommentsController < ApplicationController
   before_action :set_article
-  before_action :set_article_comment, except: [ :create]
+  before_action :set_article_comment, only: [:show, :edit, :update, :destroy]
+
+  def index
+    @comments = @article.comments
+  end
+
+  def show
+    @comment
+  end
 
   def create
     @comment = @article.comments.build(comment_params)
@@ -16,7 +24,7 @@ class CommentsController < ApplicationController
 
   def update
     if @comment.update(comment_params)
-      redirect_to article_path(@article), notice: "Comment updated."
+      redirect_to article_comments_path(@article), notice: "Comment updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -25,7 +33,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
 
-    redirect_to article_path(@article), notice: "Comment deleted."
+    redirect_to article_comments_path(@article), notice: "Comment deleted."
   end
 
   private
