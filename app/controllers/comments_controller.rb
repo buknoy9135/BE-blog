@@ -16,10 +16,10 @@ class CommentsController < ApplicationController
     if @comment.save
       redirect_to article_path(@article), notice: "Comment uploaded."
     else
-      render 'articles/show', status: :unprocessable_entity
+      render "articles/show", status: :unprocessable_entity
     end
   end
-                            
+
   def edit; end
 
   def update
